@@ -7,6 +7,7 @@ defmodule Poxa.PusherEvent do
 
   alias Poxa.PresenceSubscription
   import Poison, only: [encode!: 1]
+  require Logger
 
   @doc """
   Return a JSON for an established connection using the `socket_id` parameter to
@@ -192,6 +193,7 @@ defmodule Poxa.PusherEvent do
 
   defp publish_event_to_channel(event, channel) do
     message = build_message(event, channel) |> encode!
+    Logger.info "Publish: #{channel} #{message}"
     Poxa.registry.send!(message, channel, self(), event.socket_id)
   end
 
